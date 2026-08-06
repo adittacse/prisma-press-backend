@@ -1,5 +1,5 @@
 model Profile {
-    id String @default(uuid())
+    id String @id @default(uuid())
     userId String @unique
     user User @relation(fields: [userId], references: [id])
     profilePhoto String?

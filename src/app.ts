@@ -2,7 +2,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { Application, Request, Response } from "express";
 import config from "./config";
-import { prisma } from "./lib/prisma";
+import { userRoutes } from "./modules/user/user.route";
 
 const app: Application = express();
 
@@ -18,5 +18,7 @@ app.use(cors({
 app.get("/", async (req: Request, res: Response) => {
     res.send("Prisma Press backend is running!");
 });
+
+app.use("/api/users", userRoutes);
 
 export default app;
