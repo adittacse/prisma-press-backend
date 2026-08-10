@@ -3,6 +3,8 @@ import httpStatus from "http-status";
 import { NextFunction, Request, Response } from "express";
 import { sendResponse } from "../../utils/sendResponse";
 import { userService } from "./user.service";
+import config from "../../config";
+import { jwtUtils } from "../../utils/jwt";
 
 const registerUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const payload = req.body;
@@ -20,7 +22,24 @@ const registerUser = catchAsync(async (req: Request, res: Response, next: NextFu
 });
 
 const getMyProfile = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    await userService.getMyProfileFromDB();
+    const {accessToken} = req.cookies;
+
+    const verifiedToken = jwtUtils.verifyToken(accessToken, config.JWT_ACCESS_SECRET);
+
+    if (typeof verifiedToken === "string") {
+        throw new Error(verifiedToken);
+    }
+
+    const profile = await userService.getMyProfileFromDB(verifiedToken.id);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "User profile fetched successfully",
+        data: {
+            profile
+        }
+    });
 });
 
 export const userController = {
