@@ -5,7 +5,7 @@ import { SignOptions } from "jsonwebtoken";
 import config from "../../config";
 import { jwtUtils } from "../../utils/jwt";
 
-const loginUser = async (payload: ILoginUser) => {
+const loginUserIntoDB = async (payload: ILoginUser) => {
     const {email, password} = payload;
 
     const user = await prisma.user.findUniqueOrThrow({
@@ -47,5 +47,5 @@ const loginUser = async (payload: ILoginUser) => {
 }
 
 export const authService = {
-    loginUser
+    loginUserIntoDB
 }
