@@ -3,8 +3,6 @@ import httpStatus from "http-status";
 import { NextFunction, Request, Response } from "express";
 import { sendResponse } from "../../utils/sendResponse";
 import { userService } from "./user.service";
-import config from "../../config";
-import { jwtUtils } from "../../utils/jwt";
 
 const registerUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const payload = req.body;

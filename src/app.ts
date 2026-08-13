@@ -4,6 +4,7 @@ import express, { Application, Request, Response } from "express";
 import config from "./config";
 import { userRoutes } from "./modules/user/user.route";
 import { loginRoutes } from "./modules/auth/auth.routes";
+import { postRoutes } from "./modules/post/post.route";
 
 const app: Application = express();
 
@@ -22,5 +23,6 @@ app.get("/", async (req: Request, res: Response) => {
 
 app.use("/api/users", userRoutes);
 app.use("/api/auth", loginRoutes);
+app.use("/api/posts", postRoutes);
 
 export default app;
