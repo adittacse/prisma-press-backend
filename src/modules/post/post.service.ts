@@ -195,7 +195,7 @@ const updatePostInDB = async (postId: string, payload: IUpdatePostPayload, autho
 }
 
 const deletePostFromDB = async (postId: string, authorId: string, isAdmin: boolean) => {
-    const post = await prisma.post.delete({
+    const post = await prisma.post.findUniqueOrThrow({
         where: {
             id: postId
         }
