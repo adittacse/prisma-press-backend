@@ -7,6 +7,8 @@ const router = Router();
 
 router.get("/", postController.getAllPosts);
 router.get("/stats", auth(Role.ADMIN), postController.getPostsStats);
+router.get("/my-posts", postController.getMyPosts);
+router.get("/:postId", postController.getPostById);
 router.post("/", auth(Role.ADMIN, Role.AUTHOR, Role.USER), postController.createPost);
 router.patch("/:postId", auth(Role.ADMIN, Role.AUTHOR, Role.USER), postController.updatePost);
 router.delete("/:postId", auth(Role.ADMIN, Role.AUTHOR, Role.USER), postController.deletePost);

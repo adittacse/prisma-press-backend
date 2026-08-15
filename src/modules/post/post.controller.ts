@@ -18,6 +18,48 @@ const getAllPosts = catchAsync(async (req: Request, res: Response, next: NextFun
 
 const getPostsStats = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const result = await postService.getPostsStatsFromDB();
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Post stats retrieved successfully",
+        data: {
+            result
+        }
+    });
+});
+
+const getMyPosts = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const authorId = req.user?.id;
+    const result = await postService.getMyPostsFromDB(authorId as string);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "My posts retrieved successfully",
+        data: {
+            result
+        }
+    });
+});
+
+const getPostById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const postId = req.params.postId;
+
+    if (!postId) {
+        throw new Error("Post id required in params.");
+    }
+
+    const result = await postService.getPostByIdFromDB(postId as string);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Post retrieved successfully.",
+        data: {
+            result
+        }
+    });
 });
 
 const createPost = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -80,6 +122,8 @@ const deletePost = catchAsync(async (req: Request, res: Response, next: NextFunc
 export const postController = {
     getAllPosts,
     getPostsStats,
+    getMyPosts,
+    getPostById,
     createPost,
     updatePost,
     deletePost

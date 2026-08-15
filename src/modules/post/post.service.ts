@@ -1,3 +1,4 @@
+import { CommentStatus, PostStatus } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma"
 import { ICreatePostPayload, IUpdatePostPayload } from "./post.interface";
 
@@ -14,6 +15,80 @@ const getAllPostsFromDB = async () => {
     });
 
     return posts;
+}
+
+const getMyPostsFromDB = async(authorId: string) => {
+    const result = await prisma.post.findMany({
+        where: {
+            id: authorId
+        },
+        orderBy: {
+            createdAt: "desc"
+        },
+        include: {
+            comments: true,
+            author: {
+                omit: {
+                    password: true
+                }
+            },
+            _count: {
+                select: {
+                    comments: true
+                }
+            }
+        }
+    });
+
+    return result;
+}
+
+const getPostByIdFromDB = async(postId: string) => {
+    const transactionResult = await prisma.$transaction(
+        async (tx) => {
+            await tx.post.update({
+                where: {
+                    id: postId,
+                },
+                data: {
+                    views: {
+                        increment: 1
+                    },
+                }
+            });
+            
+            const post = await tx.post.findUniqueOrThrow({
+                where: {
+                    id: postId
+                },
+
+                include: {
+                    author: {
+                        omit: {
+                            password: true
+                        }
+                    },
+                    comments: {
+                        where: {
+                            status: CommentStatus.APPROVED
+                        },
+                        orderBy: {
+                            createdAt: "desc"
+                        }
+                    },
+                    _count: {
+                        select: {
+                            comments: true
+                        }
+                    }
+                }
+            });
+
+            return post;
+        }
+    );
+
+    return transactionResult;
 }
 
 const getPostsStatsFromDB = async () => {
@@ -140,6 +215,8 @@ const deletePostFromDB = async (postId: string, authorId: string, isAdmin: boole
 export const postService = {
     getAllPostsFromDB,
     getPostsStatsFromDB,
+    getMyPostsFromDB,
+    getPostByIdFromDB,
     createPostInDB,
     updatePostInDB,
     deletePostFromDB
