@@ -172,7 +172,7 @@ const updatePostInDB = async (postId: string, payload: IUpdatePostPayload, autho
         }
     });
 
-    if (!isAdmin && post.authorId !== authorId) {
+    if (!isAdmin || post.authorId !== authorId) {
         throw new Error("You are not the owner of this post!");
     }
 
