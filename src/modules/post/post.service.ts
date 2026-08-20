@@ -48,20 +48,19 @@ const getPostByIdFromDB = async(postId: string) => {
         async (tx) => {
             await tx.post.update({
                 where: {
-                    id: postId,
+                    id: postId
                 },
                 data: {
                     views: {
                         increment: 1
-                    },
+                    }
                 }
             });
-            
-            const post = await tx.post.findUniqueOrThrow({
+
+            const post = await tx.post.findFirstOrThrow({
                 where: {
                     id: postId
                 },
-
                 include: {
                     author: {
                         omit: {
