@@ -1,6 +1,27 @@
 import { prisma } from "../../lib/prisma"
 import { ICreateCommentPayload } from "./comment.interface";
 
+const getCommentsByAuthorIdFromDB = async (authorId: string) => {
+    const comments = await prisma.comment.findMany({
+        where: {
+            authorId
+        },
+        orderBy: {
+            createdAt: "desc"
+        },
+        include: {
+            post: {
+                select: {
+                    id: true,
+                    title: true
+                }
+            }
+        }
+    });
+
+    return comments;
+}
+
 const createCommentIntoDB = async (authorId: string, payload: ICreateCommentPayload) => {
     await prisma.post.findUniqueOrThrow({
         where: {
@@ -19,5 +40,6 @@ const createCommentIntoDB = async (authorId: string, payload: ICreateCommentPayl
 }
 
 export const commentService = {
+    getCommentsByAuthorIdFromDB,
     createCommentIntoDB,
 }
