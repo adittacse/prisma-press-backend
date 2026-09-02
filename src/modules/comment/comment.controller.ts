@@ -30,9 +30,24 @@ const createComment = catchAsync(async (req: Request, res: Response, next: NextF
             result
         }
     });
-})
+});
+
+const getCommentByPostId = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const { postId } = req.params;
+    const result = await commentService.getCommentByCommentIdFromDB(postId as string);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Comment retrieved successfully",
+        data: {
+            result
+        }
+    });
+}
 
 export const commentController = {
     getCommentsByAuthorId,
     createComment,
+    getCommentByPostId,
 }

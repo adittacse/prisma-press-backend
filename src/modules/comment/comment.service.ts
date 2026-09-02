@@ -39,7 +39,18 @@ const createCommentIntoDB = async (authorId: string, payload: ICreateCommentPayl
     return comment;
 }
 
+const getCommentByPostIdFromDB = async (postId: string) => {
+    const comment = await prisma.comment.findMany({
+        where: {
+            postId
+        }
+    });
+
+    return comment;
+}
+
 export const commentService = {
     getCommentsByAuthorIdFromDB,
     createCommentIntoDB,
+    getCommentByPostIdFromDB,
 }
