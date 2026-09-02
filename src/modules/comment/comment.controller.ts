@@ -91,9 +91,7 @@ const deleteComment = catchAsync(async (req: Request, res: Response, next: NextF
         success: true,
         statusCode: httpStatus.OK,
         message: "Comment deleted successfully",
-        data: {
-            result
-        }
+        data: null
     });
 });
 

@@ -33,7 +33,10 @@ const createCommentIntoDB = async (authorId: string, payload: ICreateCommentPayl
         data: {
             ...payload,
             authorId
-        }
+        },
+        // include: {
+        //     post: true
+        // }
     });
 
     return comment;
@@ -107,13 +110,11 @@ const deleteCommentFromDB = async (commentId: string, authorId: string) => {
         }
     });
 
-    const comment = await prisma.comment.delete({
+    await prisma.comment.delete({
         where: {
             id: commentData.id
         }
     });
-
-    return comment;
 }
 
 export const commentService = {
