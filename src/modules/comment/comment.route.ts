@@ -10,7 +10,6 @@ router.post("/", auth(Role.ADMIN, Role.AUTHOR, Role.USER), commentController.cre
 router.get("/:postId", commentController.getCommentByPostId);
 router.patch("/:commentId", auth(Role.ADMIN, Role.AUTHOR, Role.USER), commentController.updateComment);
 router.patch("/:commentId/moderate", auth(Role.ADMIN), commentController.moderateComment);
-
-// DELETE	/api/comments/:commentId	Delete a comment owned by the logged-in user.
+router.delete("/:commentId", auth(Role.ADMIN, Role.AUTHOR, Role.USER), commentController.deleteComment);
 
 export const commentRouter = router;
