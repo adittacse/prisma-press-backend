@@ -8,5 +8,9 @@ export interface ICreateCommentPayload {
 
 export interface IUpdateCommentPayload {
     content?: string;
-    status?: CommentStatus
+    status?: CommentStatus;
+}
+
+export interface IModerateCommentPayload {
+    status: CommentStatus;
 }

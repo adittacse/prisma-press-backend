@@ -9,9 +9,8 @@ router.get("/author/:authorId", commentController.getCommentsByAuthorId);
 router.post("/", auth(Role.ADMIN, Role.AUTHOR, Role.USER), commentController.createComment);
 router.get("/:postId", commentController.getCommentByPostId);
 router.patch("/:commentId", auth(Role.ADMIN, Role.AUTHOR, Role.USER), commentController.updateComment);
-
+router.patch("/:commentId/moderate", auth(Role.ADMIN), commentController.moderateComment);
 
 // DELETE	/api/comments/:commentId	Delete a comment owned by the logged-in user.
-// PATCH	/api/comments/:commentId/moderate   Allow admin moderation of comment status.
 
 export const commentRouter = router;
