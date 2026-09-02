@@ -49,8 +49,31 @@ const getCommentByPostIdFromDB = async (postId: string) => {
     return comment;
 }
 
+const updateCommentInDB = async (commentId: string, authorId: string, payload: any) => {
+    await prisma.comment.findUniqueOrThrow({
+        where: {
+            id: commentId,
+            authorId
+        },
+        select: {
+            id: true
+        }
+    });
+
+    const comment = await prisma.comment.update({
+        where: {
+            id: commentId,
+            authorId
+        },
+        data: payload
+    });
+
+    return comment;
+};
+
 export const commentService = {
     getCommentsByAuthorIdFromDB,
     createCommentIntoDB,
     getCommentByPostIdFromDB,
+    updateCommentInDB,
 }
