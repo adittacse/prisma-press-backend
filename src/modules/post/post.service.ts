@@ -4,6 +4,73 @@ import { ICreatePostPayload, IUpdatePostPayload } from "./post.interface";
 
 const getAllPostsFromDB = async () => {
     const posts = await prisma.post.findMany({
+        // filtering or exact match without AND operator
+
+        // where: {
+        //     title: "My First Post"
+        // },
+
+        // filtering or exact match with AND operator
+
+        // where: {
+        //     AND: [
+        //         {
+        //             title: "My First Post"
+        //         }
+        //     ]
+        // },
+
+        // searching or partial match without OR operator
+
+        // where: {
+        //     title: {
+        //         contains: "sylhet tour",
+        //         mode: "insensitive"
+        //     },
+        //     content: {
+        //         contains: "Content of the post goes here. Updated"
+        //     }
+        // },
+
+        // searching or partial match with OR operator
+
+        // where: {
+        //     OR: [
+        //         {
+        //             title: {
+        //                 contains: "sylhet tour",
+        //                 mode: "insensitive"
+        //             }
+        //         },
+        //         {
+        //             content: {
+        //                 contains: "Content of the post goes here. Updated"
+        //             }
+        //         }
+        //     ]
+        // },
+
+        // combining search (OR operator) and filtering (AND operator)
+
+        where: {
+            AND: [
+                {
+                    // searching
+                    OR: [
+                        {
+                            title: {
+                                contains: "sylhet tour",
+                                mode: "insensitive"
+                            }
+                        }
+                    ]
+                },
+                // filtering
+                {
+                    title: "Sylhet Tour 2"
+                }
+            ]
+        },
         include: {
             author: {
                 omit: {
